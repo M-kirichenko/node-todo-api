@@ -1,72 +1,81 @@
 const db = require("../models");
-
 const Todos = db.todos;
 
 exports.make = (req, res) => {
-  const {text, isCheck = false} = req.body;
-  const todo = {text, isCheck};
-  Todos.create(todo).then(data => {
+  if(!req.body.hasOwnProperty("text")) {
+    res.status(422);
+    res.send({answer: "No data was send"});
+  }
+
+  Todos.create(req.body).then(data => {
     res.send(data);
   })
-}
-
-exports.all = (req, res) => {
-  Todos.findAll().then(data => {
-    if(data.length) res.send(data);
-    else res.status("204").send()
+  .catch(err => {
+    res.status(422).send({answer: "Invalid params"});
+    console.log(err);
   });
 }
 
+exports.all = (req, res) => {
+  Todos.findAll().then(data => res.send(data));
+}
+
 exports.delete = (req, res) => {
-  const {params} = req;
-  const ans = {};
-  
-  if (params.hasOwnProperty("id") && parseInt(params.id)) {
-    const {id} = params;
-    
-    Todos.findByPk(id).then(found => {
-      if(found) {
-        Todos.destroy({
-          where: {id}
-        });
-        ans.answer = `Task: ${found.text} was successfully deleted`;
-      } else {
-        res.status("404");
-        ans.answer = `Task with id: ${id} not found`
-      }
-      res.send(ans);
-    });
-  } else {
-    ans.answer = "Invalid argument";
-    res.status("422").send(ans);
-  }
+  const {id} = req.params;
+
+  Todos.destroy({
+    where: {id}
+  })
+  .then(affected => {
+    if(affected > 0) {
+      res.send({
+        answer: `Task with id:${id} was successfully deleted!`
+      });
+    } else {
+      res.status(404);
+      res.send({answer: `Task with id:${id} wasn't found!`})
+    }
+
+    res.send(ans);
+  })
+  .catch(err => {
+    res.status(422).send({answer: "Invalid params"});
+    console.log(err);
+  });
 }
 
 exports.update = (req, res) => {
   const {id} = req.params;
   const {body} = req;
-  const ans = {};
+  const {text, isCheck} = body;
+  let cols = {};
 
-    Todos.findByPk(id).then(found => {
-      if(found) {
-        const {text, isCheck} = body;
-        let cols = {};
+  if(text) cols = {text};
 
-        if(text) cols = {text};
+  if(isCheck!==undefined) cols = {...cols, isCheck};
 
-        if(isCheck!=undefined) cols = {...cols, isCheck};
-        
-        Todos.update(
-          cols,
-          {where: {id}}
-        );
-
-        ans.answer = `Task with id ${id} was successfully updated`;
+  Todos.update(
+    cols,
+    {where: {id}}
+  )
+  .then(affected => {
+    if(
+      !cols.hasOwnProperty("text") && 
+      !cols.hasOwnProperty("isCheck")
+      ) {
+      res.status(422).send({answer: "No params were send!"});
+    } else {
+      if(affected > 0) {
+        res.send({answer: `Task with id:${id} was successfully updated!`});
       } else {
-        res.status("404");
-        ans.answer = `Task with id: ${id} not found`
+        res.status(404).send({
+          answer: `Task with id:${id} wasn't found!`
+        });
       }
-
-      res.send(ans);
-    });
+    }
+  })
+  .catch(err => {
+    res.status(422).send({answer: "Invalid params"});
+    console.log(err);
+  });
 }

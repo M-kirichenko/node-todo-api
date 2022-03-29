@@ -2,7 +2,12 @@ module.exports = app => {
   const todosController = require("./controllers/todos.controller.js")
   const router = require('express').Router();
 
-  router.route('/:id(\\d+)')
+  // //check if id is integer
+  // router.route('/:id(\\d+)')
+  // .delete(todosController.delete)
+  // .patch(todosController.update);
+
+  router.route('/:id')
   .delete(todosController.delete)
   .patch(todosController.update);
 
