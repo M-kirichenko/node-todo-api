@@ -46,16 +46,16 @@ exports.update = (req, res) => {
   const {id} = req.params;
   const {body} = req;
   const ans = {};
-  
+
     Todos.findByPk(id).then(found => {
       if(found) {
         const {text, isCheck} = body;
-        const cols = {};
+        let cols = {};
 
-        if(text!=undefined) cols.text = text;
-    
-        if(isCheck!=undefined) cols.isCheck = isCheck;
+        if(text) cols = {text};
 
+        if(isCheck!=undefined) cols = {...cols, isCheck};
+        
         Todos.update(
           cols,
           {where: {id}}
