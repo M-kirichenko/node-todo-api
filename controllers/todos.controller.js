@@ -33,10 +33,8 @@ exports.delete = (req, res) => {
       });
     } else {
       res.status(404);
-      res.send({answer: `Task with id:${id} wasn't found!`})
+      res.send({answer: `Task with id:${id} wasn't found!`});
     }
-
-    res.send(ans);
   })
   .catch(err => {
     res.status(422).send({answer: "Invalid params"});
@@ -65,13 +63,13 @@ exports.update = (req, res) => {
       ) {
       res.status(422).send({answer: "No params were send!"});
     } else {
-      if(affected > 0) {
-        res.send({answer: `Task with id:${id} was successfully updated!`});
-      } else {
-        res.status(404).send({
-          answer: `Task with id:${id} wasn't found!`
-        });
-      }
+        if(affected > 0) {
+          res.send({answer: `Task with id:${id} was successfully updated!`});
+        } else {
+          res.status(404).send({
+            answer: `Task with id:${id} wasn't found!`
+          });
+        }
     }
   })
   .catch(err => {
