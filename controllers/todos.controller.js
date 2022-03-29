@@ -46,26 +46,21 @@ exports.update = (req, res) => {
   const {id} = req.params;
   const {body} = req;
   const ans = {};
-
-
+  
     Todos.findByPk(id).then(found => {
       if(found) {
         const {text, isCheck} = body;
+        const cols = {};
 
-        if(text!=undefined){
-          Todos.update(
-            {text},
-            {where: {id}}
-          );
-        }
+        if(text!=undefined) cols.text = text;
+    
+        if(isCheck!=undefined) cols.isCheck = isCheck;
 
-        if(isCheck!=undefined){
-          Todos.update(
-            {isCheck},
-            {where: {id}}
-          );
-        }
-        
+        Todos.update(
+          cols,
+          {where: {id}}
+        );
+
         ans.answer = `Task with id ${id} was successfully updated`;
       } else {
         res.status("404");
