@@ -4,7 +4,7 @@ module.exports = app => {
 
   router.route('/:id(\\d+)')
   .delete(todosController.delete)
-  // .patch(todosController.update);
+  .patch(todosController.update);
 
   router.route('/')
   .get(todosController.all)

@@ -41,3 +41,37 @@ exports.delete = (req, res) => {
     res.status("422").send(ans);
   }
 }
+
+exports.update = (req, res) => {
+  const {id} = req.params;
+  const {body} = req;
+  const ans = {};
+
+
+    Todos.findByPk(id).then(found => {
+      if(found) {
+        const {text, isCheck} = body;
+
+        if(text!=undefined){
+          Todos.update(
+            {text},
+            {where: {id}}
+          );
+        }
+
+        if(isCheck!=undefined){
+          Todos.update(
+            {isCheck},
+            {where: {id}}
+          );
+        }
+        
+        ans.answer = `Task with id ${id} was successfully updated`;
+      } else {
+        res.status("404");
+        ans.answer = `Task with id: ${id} not found`
+      }
+
+      res.send(ans);
+    });
+}
