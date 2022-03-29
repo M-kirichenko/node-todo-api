@@ -1,0 +1,35 @@
+{
+  "name": "todos",
+  "version": "1.0.0",
+  "description": "to-do-list-api",
+  "main": "app.js",
+  "scripts": {
+    "test": "node app.js",
+    "start": "nodemon node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/M-kirichenko/node-todo-api.git"
+  },
+  "keywords": [
+    "todo-api",
+    "node-todo-api",
+    "nodejs-api"
+  ],
+  "author": "Misha Kirichenko",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/M-kirichenko/node-todo-api/issues"
+  },
+  "homepage": "https://github.com/M-kirichenko/node-todo-api#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.17.3",
+    "pg": "^8.7.3",
+    "pg-hstore": "^2.3.4",
+    "sequelize": "^6.17.0"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
+  }
+}
