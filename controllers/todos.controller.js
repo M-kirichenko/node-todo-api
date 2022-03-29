@@ -52,28 +52,28 @@ exports.update = (req, res) => {
 
   if(isCheck!==undefined) cols = {...cols, isCheck};
 
-  Todos.update(
-    cols,
-    {where: {id}}
-  )
-  .then(affected => {
-    if(
-      !cols.hasOwnProperty("text") && 
-      !cols.hasOwnProperty("isCheck")
-      ) {
-      res.status(422).send({answer: "No params were send!"});
-    } else {
-        if(affected > 0) {
+  if(
+    !cols.hasOwnProperty("text") && 
+    !cols.hasOwnProperty("isCheck")
+    ) {
+    res.status(422).send({answer: "No params were send!"});
+  } else{
+    Todos.update(
+      cols,
+      {where: {id}}
+    )
+    .then(affected => {
+      if(affected > 0) {
           res.send({answer: `Task with id:${id} was successfully updated!`});
-        } else {
-          res.status(404).send({
-            answer: `Task with id:${id} wasn't found!`
-          });
-        }
-    }
-  })
-  .catch(err => {
-    res.status(422).send({answer: "Invalid params"});
-    console.log(err);
-  });
+      } else {
+        res.status(404).send({
+          answer: `Task with id:${id} wasn't found!`
+        });
+      }
+    })
+    .catch(err => {
+      res.status(422).send({answer: "Invalid params"});
+      console.log(err);
+    });
+  }
 }
