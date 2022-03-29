@@ -4,7 +4,8 @@ module.exports = (sequelize, Sequelize) =>{
     type: Sequelize.STRING
   },
   isCheck: {
-    type: Sequelize.BOOLEAN
+    type: Sequelize.BOOLEAN,
+    defaultValue: false
   }
  });
  
