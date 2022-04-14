@@ -46,19 +46,19 @@ exports.delete = (req, res) => {
 exports.update = (req, res) => {
   const { id } = req.params;
   const { body } = req;
-  const { text, isCheck } = body;
 
   if (!id.trim()) res.status(422).send({ answer: "incorrect id!" });
 
   if (!body.hasOwnProperty("text") && !body.hasOwnProperty("isCheck")) {
     res.status(422).send({ answer: "No params were send!" });
   } else {
+    const { text, isCheck } = body;
     let cols = {};
 
     if (text) cols = { text };
 
     if (isCheck !== null) cols = { ...cols, isCheck };
-    console.log(cols);
+
     if (Object.keys(cols).length) {
       todos
         .update(cols, { where: { id } })
