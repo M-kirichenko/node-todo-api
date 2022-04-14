@@ -9,7 +9,7 @@ module.exports = (app) => {
 
   router
     .route("/:id")
-    // .get(todosController.getOne)
+    .get(todosController.getOne)
     .delete(todosController.delete)
     .patch(todosController.update);
 

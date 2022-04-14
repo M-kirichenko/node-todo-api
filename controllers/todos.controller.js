@@ -57,8 +57,8 @@ exports.update = (req, res) => {
 
     if (text) cols = { text };
 
-    if (isCheck) cols = { ...cols, isCheck };
-
+    if (isCheck !== null) cols = { ...cols, isCheck };
+    console.log(cols);
     if (Object.keys(cols).length) {
       todos
         .update(cols, { where: { id } })
@@ -80,6 +80,25 @@ exports.update = (req, res) => {
       res.send({ answer: `None of params could be empty!` });
     }
   }
+};
+
+exports.getOne = (req, res) => {
+  const { id } = req.params;
+
+  if (!id.trim()) res.status(422).send({ answer: "incorrect id!" });
+  todos
+    .findByPk(id)
+    .then((found) => {
+      if (found) res.send(found);
+      else {
+        res.status(404).send({
+          answer: `Todo with id:${id} wasn't found!`,
+        });
+      }
+    })
+    .catch((err) => {
+      res.status(422).send({ answer: "Invalid params" });
+    });
 };
 
 exports.all = (req, res) => {
