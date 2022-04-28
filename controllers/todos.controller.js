@@ -12,7 +12,7 @@ exports.make = (req, res) => {
   todos
     .create(req.body)
     .then((data) => {
-      res.send(data);
+      this.all(req, res);
     })
     .catch((err) => {
       res.status(422).send({ answer: "Invalid params" });
@@ -30,9 +30,7 @@ exports.delete = (req, res) => {
     })
     .then((affected) => {
       if (affected > 0) {
-        res.send({
-          answer: `Todo with id:${id} was successfully deleted!`,
-        });
+        this.all(req, res);
       } else {
         res.status(404);
         res.send({ answer: `Todo with id:${id} wasn't found!` });
@@ -64,9 +62,7 @@ exports.update = (req, res) => {
         .update(cols, { where: { id } })
         .then((affected) => {
           if (affected > 0) {
-            res.send({
-              answer: `Todo with id:${id} was successfully updated!`,
-            });
+            this.all(req, res);
           } else {
             res.status(404).send({
               answer: `Todo with id:${id} wasn't found!`,
